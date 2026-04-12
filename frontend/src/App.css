@@ -1,0 +1,7 @@
+/* App-level overrides — leaflet map tile attribution */
+.leaflet-control-attribution {
+  background: rgba(8, 9, 26, 0.75) !important;
+  color: #475569 !important;
+  font-size: 10px;
+}
+.leaflet-control-attribution a { color: #64748b !important; }

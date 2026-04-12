@@ -1,26 +1,45 @@
 import axios from 'axios';
 
-// Running Python backend
 const API_URL = 'https://ridefair-estimater.onrender.com';
 
+const client = axios.create({
+  baseURL: API_URL,
+  timeout: 15000, // 15 s — Render free tier can cold-start slowly
+});
+
 export const getFairPrice = async (distance, hour, isWeekend) => {
-    const response = await axios.post(`${API_URL}/predict-price`, {
-        distance_km: parseFloat(distance),
-        hour: parseInt(hour),
-        is_weekend: parseInt(isWeekend)
+  try {
+    const res = await client.post('/predict-price', {
+      distance_km: parseFloat(distance),
+      hour:        parseInt(hour),
+      is_weekend:  parseInt(isWeekend),
     });
-    return response.data;
+    return res.data;
+  } catch (err) {
+    const detail = err.response?.data?.detail;
+    return { error: detail || 'Could not reach the server. Is the backend running?' };
+  }
 };
 
 export const detectScam = async (distance, price) => {
-    const response = await axios.post(`${API_URL}/detect-scam`, {
-        distance_km: parseFloat(distance),
-        price_asked: parseFloat(price)
+  try {
+    const res = await client.post('/detect-scam', {
+      distance_km: parseFloat(distance),
+      price_asked: parseFloat(price),
     });
-    return response.data;
+    return res.data;
+  } catch (err) {
+    const detail = err.response?.data?.detail;
+    return { error: detail || 'Could not reach the server. Is the backend running?' };
+  }
 };
 
 export const getHotspots = async () => {
-    const response = await axios.get(`${API_URL}/hotspots`);
-    return response.data;
+  try {
+    const res = await client.get('/hotspots');
+    return res.data;
+  } catch (err) {
+    const detail = err.response?.data?.detail;
+    return { error: detail || 'Could not load hotspot data.' };
+  }
 };

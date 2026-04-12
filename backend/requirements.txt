@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 scikit-learn
 pandas
 numpy
@@ -7,3 +7,4 @@ pydantic
 python-multipart
 requests
 mysql-connector-python
+python-dotenv
